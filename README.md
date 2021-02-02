@@ -1,2 +1,2 @@
 # tools_bauerlab
-A collection of tools for data of the lab of Sebastian Bauer
+Tools to read and process data from the lab of Sebastian Bauer (University of Frankfurt)
