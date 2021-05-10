@@ -9,7 +9,7 @@ def test_generate_default_re():
     ls_positive_cases = [
         '/home/jovyan/work/epilepsy-data/data/PPS-rats-from-Sebastian/Control-Rats/3266/3266/EPG/EPG-2016-04-08T07-59-34-filter.csv',
         '/home/jovyan/work/epilepsy-data/data/PPS-rats-from-Sebastian/Control-Rats/3263/3263/EPG/EPG-2016-03-28T07-59-42-filter.csv',
-        '/home/jovyan/work/epilepsy-data/data/PPS-rats-from-Sebastian/PPS-Rats/32139/EPG/2017-05-29T11-59-07-filter.csv'
+        '/home/jovyan/work/epilepsy-data/data/PPS-rats-from-Sebastian/PPS-Rats/32139/32139/EPG/2017-05-29T11-59-07-filter.csv'
         ]
 
     ls_negative_cases = [
@@ -24,5 +24,5 @@ def test_generate_default_re():
     df_pos = df_pos['fname'].str.extract(re, expand=True)
     df_neg = df_neg['fname'].str.extract(re, expand=True)
 
-    assert len(df_pos) == len(ls_positive_cases)
-    assert len(df_neg) == 0
+    assert df_pos.isnull().values.any() == False
+    assert df_neg.isnull().values.any() == True

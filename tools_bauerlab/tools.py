@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-
+import pdb
 
 def generate_default_re():
     treatments = ['Control-Rats', 'PPS-Rats']
@@ -17,8 +17,7 @@ def generate_default_re():
           ')/('+sub_id+
           ')/(?:'+sub_id+
           ')/('+sub_stage+
-          ')/'+'(?:'+sub_stage+
-          ')-('+sub_date+')'+
+          ')/(?:(?:'+sub_stage+')-)?('+sub_date+')'+
           'T('+sub_time+')'+
           '-' + sub_suffix)
 
@@ -36,7 +35,7 @@ def generate_fileinfo_table(path, re=None):
 
     ls_fname = [str(i.absolute()) for i in Path(path).rglob('*')]
     df = pd.DataFrame({'fname': ls_fname})
-        
+    pdb.set_trace()
     df_extract = df['fname'].str.extract(re, expand=True)
 
     df_extract = df_extract.rename(
@@ -60,15 +59,17 @@ def generate_fileinfo_table(path, re=None):
     
     return df
         
+
 def _assign_datetime(df, drop_columns=False):
     df['datetime'] = pd.to_datetime(df['date']+'-'+df['time'], format="%Y-%m-%d-%H-%M-%S")
     if drop_columns:
         df = df.drop(['date', 'time'], axis=1, inplace=False)
     return df
 
+
 def get_stageonset(df):
     """
-    For each animal, get the minimal time for each stage 
+    For each animal, get the minimal time for each stage
     """
 #    df_i = pd.DataFrame.copy(df)
     onst = df.groupby(['id', 'stage'])['datetime'].min()
@@ -80,8 +81,9 @@ def get_stageonset(df):
     return df_on
 
 
-def get_deltat_stageonset(df, df_on=None, return_total_seconds=False, return_deltat=False):
-    """ 
+def get_deltat_stageonset(
+        df, df_on=None, return_total_seconds=False, return_deltat=False):
+    """
     Get time since stageonset
     """
 
