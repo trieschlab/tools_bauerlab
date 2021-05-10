@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-import pdb
+
 
 def generate_default_re():
     treatments = ['Control-Rats', 'PPS-Rats']
@@ -35,7 +35,6 @@ def generate_fileinfo_table(path, re=None):
 
     ls_fname = [str(i.absolute()) for i in Path(path).rglob('*')]
     df = pd.DataFrame({'fname': ls_fname})
-    pdb.set_trace()
     df_extract = df['fname'].str.extract(re, expand=True)
 
     df_extract = df_extract.rename(
