@@ -68,7 +68,7 @@ def _assign_datetime(df, drop_columns=False):
 
 def get_stageonset(df):
     """
-    For each animal, get the minimal time for each stage
+    For each animal, get the minimal starting time for each stage
     """
 #    df_i = pd.DataFrame.copy(df)
     onst = df.groupby(['id', 'stage'])['datetime'].min()
@@ -78,6 +78,21 @@ def get_stageonset(df):
 #    df_on[id] = pd.to_numeric(df_on['id'])
     
     return df_on
+
+
+def get_stageend(df):
+    """
+    For each animal, get the maximal starting time for each stage
+    """
+    
+#    df_i = pd.DataFrame.copy(df)
+    end = df.groupby(['id', 'stage'])['datetime'].max()
+    df_end = pd.DataFrame(end).reset_index()
+    
+    # convert id to int
+#    df_on[id] = pd.to_numeric(df_on['id'])
+    
+    return df_end
 
 
 def get_deltat_stageonset(
@@ -108,3 +123,34 @@ def get_deltat_stageonset(
     else:
         df['deltat_stageonset'] = ls_delta_t
         return df
+
+
+def get_deltat_stageend(
+        df, df_end=None, return_total_seconds=False, return_deltat=False):
+    """
+    Get time since stageonset
+    """
+
+    if not df_end:
+        df_end = get_stageend(df)
+    
+    ls_delta_t = []
+    for i, row_i in df.iterrows():
+        # define time vector
+        id_i = row_i['id']
+        stage_i = row_i['stage']
+        t_i = row_i['datetime']
+        t_end = df_end[
+            (df_end['stage'] == stage_i) &
+            (df_end['id'] == id_i)]['datetime'].values[0]
+        delta_t = t_i-t_end
+        if return_total_seconds:
+            delta_t = delta_t.total_seconds()
+        ls_delta_t.append(delta_t)
+
+    if return_deltat:
+        return ls_delta_t
+    else:
+        df['deltat_stageend'] = ls_delta_t
+        return df
+    

@@ -2,7 +2,7 @@
 
 from setuptools import find_packages, setup
 
-INSTALL_REQUIRES = ['pandas >= 0.18.0']
+INSTALL_REQUIRES = ['pandas >= 0.18.0', 'pathlib']
 TESTS_REQUIRE = ['pytest >= 2.7.1']
 
 setup(
